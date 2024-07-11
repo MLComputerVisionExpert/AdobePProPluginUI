@@ -22,56 +22,126 @@ document.getElementById("tabs").innerHTML = tabsHtml;
 
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
+
+
+    var minOffset = 340;
+    var maxOffset = 800;
+
+    var handle = document.querySelector('.handle');
+    var sidebar = document.querySelector('.sidebar');
+    var content = document.querySelector('.content');
+
+    var isDragging = false;
+    var startX = 0;
+    var startSidebarWidth = 0;
+    var startContentWidth = 0;
+
+    handle.addEventListener('mousedown', function (ev) {
+        isDragging = true;
+        startX = ev.pageX;
+        startSidebarWidth = sidebar.offsetWidth;
+        startContentWidth = content.offsetWidth;
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+    });
+
+    let timeout = null;
+
+    function mouseMoveHandler(ev) {
+        if (!isDragging) return;
+
+        var offsetX = ev.pageX - startX;
+        var newSidebarWidth = startSidebarWidth + offsetX;
+        var newContentWidth = startContentWidth - offsetX;
+
+        // Ensure sidebar width stays within minOffset and maxOffset
+        newSidebarWidth = Math.max(minOffset, Math.min(maxOffset, newSidebarWidth));
+
+        sidebar.style.width = newSidebarWidth + 'px';
+        content.style.width = newContentWidth + 'px';
+
+        // Debounce the function to limit the rate of execution
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            // Perform any additional actions after debounce delay if needed
+        }, 16); // Adjust delay as needed (e.g., 16ms for 60fps)
+    }
+    function mouseUpHandler() {
+        isDragging = false;
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+    }
+
     document.getElementById("web-content").innerHTML = '<div class="flex w-full flex-wrap items-center justify-center h-full" id="main-content"><p class="text-primary text-sm p-4">Select an item on the left or type above to search.</p></div>';
 
-    // Sample directory data (nested structure with folders and files)
     const directoryData = [
         {
             name: "Impacts",
             type: "folder",
             children: [
-                { name: "PM_Impact 01 Strong.wav", type: "file", track: "Impacts/PM_Impact 01 Strong.png" },
-                { name: "PM_Impact 02 Quick.wav", type: "file", track: "Impacts/PM_Impact 02 Quick.png" },
-                { name: "PM_Impact 03 Epic.wav", type: "file", track: "Impacts/PM_Impact 03 Epic.png" },
+                
             ]
         },
         {
-            name: "Random",
+            name: "Transitions",
             type: "folder",
             children: [
-                { name: "PM_Bonus 01 Lion Roar.wav", type: "file", track: "Random/PM_Bonus 01 Lion Roar.png" },
-                { name: "PM_Bonus 02 Crowd Cheer.wav", type: "file", track: "Random/PM_Bonus 02 Crowd Cheer.png" }
+                
             ]
         },
         {
-            name: "Risers",
+            name: "Sound Effects",
             type: "folder",
             children: [
-                { name: "PM_Riser 01 Quick.wav", type: "file", track: "Risers/PM_Riser 01 Quick.png" },
-                { name: "PM_Riser 02 Long.wav", type: "file", track: "Risers/PM_Riser 02 Long.png" },
-                { name: "PM_Riser 03 Deep.wav", type: "file", track: "Risers/PM_Riser 03 Deep.png" }
+                {
+                    name: "Random",
+                    type: "folder",
+                    children: [
+                        { name: "PM_Bonus 01 Lion Roar.wav", type: "file", path: "/Media/Sound Effects/Random", track: "Sound Effects/Random/PM_Bonus 01 Lion Roar.png" },
+                        { name: "PM_Bonus 02 Crowd Cheer.wav", type: "file", path: "/Media/Sound Effects/Random", track: "Sound Effects/Random/PM_Bonus 02 Crowd Cheer.png" }
+                    ]
+                },
+                {
+                    name: "Risers",
+                    type: "folder",
+                    children: [
+                        { name: "PM_Riser 01 Quick.wav", type: "file", path: "/Media/Sound Effects/Risers", track: "Sound Effects/Risers/PM_Riser 01 Quick.png" },
+                        { name: "PM_Riser 02 Long.wav", type: "file", path: "/Media/Sound Effects/Risers", track: "Sound Effects/Risers/PM_Riser 02 Long.png" },
+                        { name: "PM_Riser 03 Deep.wav", type: "file", path: "/Media/Sound Effects/Risers", track: "Sound Effects/Risers/PM_Riser 03 Deep.png" }
+                    ]
+                },
+                {
+                    name: "Whooshes",
+                    type: "folder",
+                    children: [
+                        { name: "PM_Whoosh 01 Deep.wav", type: "file", path: "/Media/Sound Effects/Whooshes", track: "Sound Effects/Whooshes/PM_Whoosh 01 Deep.png" },
+                        { name: "PM_Whoosh 02 Shallow.wav", type: "file", path: "/Media/Sound Effects/Whooshes", track: "Sound Effects/Whooshes/PM_Whoosh 02 Shallow.png" },
+                        { name: "PM_Whoosh 03 Airy.wav", type: "file", path: "/Media/Sound Effects/Whooshes", track: "Sound Effects/Whooshes/PM_Whoosh 03 Airy.png" },
+                        { name: "PM_Whoosh 04 Middle.wav", type: "file", path: "/Media/Sound Effects/Whooshes", track: "Sound Effects/Whooshes/PM_Whoosh 04 Middle.png" },
+                        { name: "PM_Whoosh 05 Textured.wav", type: "file", path: "/Media/Sound Effects/Whooshes", track: "Sound Effects/Whooshes/PM_Whoosh 05 Textured.png" }
+                    ]
+                },
+                {
+                    name: "Impact",
+                    type: "folder",
+                    children: [
+                        { name: "S_PM_Impact 01 Strong.wav", type: "file", path: "/Media/Sound Effects/Impact", track: "Sound Effects/Impact/S_PM_Impact 01 Strong.png" },
+                        { name: "S_PM_Impact 02 Quick.wav", type: "file", path: "/Media/Sound Effects/Impact", track: "Sound Effects/Impact/S_PM_Impact 02 Quick.png" },
+                        { name: "S_PM_Impact 03 Epic.wav", type: "file", path: "/Media/Sound Effects/Impact", track: "Sound Effects/Impact/S_PM_Impact 03 Epic.png" },
+                    ]
+                },
             ]
         },
-        {
-            name: "Whooshes",
-            type: "folder",
-            children: [
-                { name: "PM_Whoosh 01 Deep.wav", type: "file", track: "Whooshes/PM_Whoosh 01 Deep.png" },
-                { name: "PM_Whoosh 02 Shallow.wav", type: "file", track: "Whooshes/PM_Whoosh 02 Shallow.png" },
-                { name: "PM_Whoosh 03 Airy.wav", type: "file", track: "Whooshes/PM_Whoosh 03 Airy.png" },
-                { name: "PM_Whoosh 04 Middle.wav", type: "file", track: "Whooshes/PM_Whoosh 04 Middle.png" },
-                { name: "PM_Whoosh 05 Textured.wav", type: "file", track: "Whooshes/PM_Whoosh 05 Textured.png" }
-            ]
-        }
     ];
-    // Get the container where cards will be appended
     const container = document.getElementById('main-content');
-    // Function to populate the directory sidebar
     function populateDirectory(data, parentElement) {
         data.forEach(item => {
             const li = document.createElement('li');
-            li.textContent = item.name;
-            li.classList.add('directory-item');
+            li.textContent = item.name.split(".")[0];
+            li.classList.add('directory-item', "flex-wrap");
 
 
             // Check if it's a folder with children
@@ -102,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 svg2.setAttribute('stroke-width', '1.5');
                 svg2.setAttribute('stroke', 'currentColor');
                 svg2.setAttribute('class', 'size-6');
-                svg2.setAttribute('style', 'height: 20px; margin-right: 8px'); // Fix: style attribute corrected
+                svg2.setAttribute('style', 'height: 20px; margin-right: 8px;'); // Fix: style attribute corrected
 
 
                 const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -114,17 +184,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Prepend the second SVG element to the li
                 li.prepend(svg2);
+
             } else {
-                console.log(li);
-                // It's a file or something else
+
+                const fileIcon1 = document.createElement('div');
+                const icon = document.createElement('i');
+                icon.setAttribute('class', 'nav-favorites');
+                icon.setAttribute('data-files', 'Media/' + item.name);
+                icon.style.color = '#000000';
+                icon.style.transform = 'translateX(-38px)';
+                fileIcon1.append(icon);
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" style="width: 20px;">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" stroke="#000000" />
+                                </svg>`;
                 const fileIcon = document.createElement('div');
                 fileIcon.setAttribute('class', 'image_cover');
-                fileIcon.setAttribute('style', 'padding: 0 3px; border: 1px solid #01E0B9; height: 24px;');
+                fileIcon.setAttribute('style', 'padding: 0 3px; border: 1px solid #01E0B9; height: 14px; display: flex; items: center;');
                 fileIcon.innerHTML = `
-            <img src="images/audio-wave.png" alt="" class="img" style="height: 100%;">
-        `;
+                    <img src="images/audio-wave.png" alt="" class="img" style="transform: scale(1.2); height: 100%;">
+                `;
                 // li.appendChild(fileIcon);
-                li.prepend(fileIcon)
+                li.prepend(fileIcon1, fileIcon)
+
+                checkAndSetColorForCards();
             }
 
 
@@ -146,10 +228,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // Display each file name
                     item.children.forEach((child, _id) => { // Adjusted here
-                        contentArea.innerHTML += `<div class="w-full sm:w-1/2 lg:w-1/3" style="padding:0 5px">
-                        <div class="card voice-card" style="margin: 4px 0">
-                            <div class="wave-form" data-audio-file="./Media/${item.name}/${child.name}">
-                                <img class="w-full" style="cursor: pointer; max-height: 100px" src="./Media/${child.track}" />
+
+                        if (child.type !== "folder") {
+                            contentArea.innerHTML += `<div class="overflow-hidden w-full sm:w-1/2 lg:w-1/3" style="padding:0 5px; min-width: 250px;">
+                        <div class="card voice-card w-full" style="margin: 4px 0">
+                            <div class="wave-form" data-audio-file="${child.path}/${child.name}">
+                                <img class="w-full" style="cursor: pointer; max-height: 160px; height: 100%;" src="./Media/${child.track}" />
                             </div>
                             <div class="voice-card-content">
                                 <div class="voice-card-content-det">
@@ -159,14 +243,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                         </div>
                                         <span class="text-sm">${child.name}</span>
                                     </div>
-                                    <button type="button" class="bg-transparent border-none star-icon add-to-favorites" data-_id="${_id}" data-files="${child.track}" data-folder="${item.name}" data-child-folder="${item.name}" onclick="toggleFavorite(event)">
-                                        <i class="fa-solid fa-star"></i>
+                                    <button type="button" class="bg-transparent border-none star-icon add-to-favorites" data-_id="${_id}" data-files="Media/${child.name}" data-folder="${item.name}" data-child-folder="${item.name}" onclick="toggleFavorite(event)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" style="width: 25px;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" stroke="#000000" />
+                                        </svg>
                                     </button>
-
                                 </div>
                             </div>
                         </div>
                     </div>`;
+                        }
                     });
 
                     if (ul.style.display === 'none') {
@@ -186,16 +272,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
+
             parentElement.appendChild(li);
         });
     }
-    // Example function to display file details
     function displayFileDetails(file) {
         console.log('Clicked file:', file.name);
     }
 
 
-    // Function to handle search input
     function handleSearch() {
         const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
         const directoryItems = document.querySelectorAll('.directory-item');
@@ -214,14 +299,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Initialize the directory
     const directoryContainer = document.getElementById('directory');
     populateDirectory(directoryData, directoryContainer);
 
-    // Attach event listener to search input
     document.getElementById('searchInput').addEventListener('input', handleSearch);
-
-
 
     let wavesurfer = null;
     let playerTime = null;
@@ -229,19 +310,16 @@ document.addEventListener("DOMContentLoaded", () => {
     let replayControl = null;
     let volumeControl = null;
     let rangeControl = null;
-    
-// Function to create the player section dynamically
-function createPlayer(audioFile) {
-    // Remove existing player section if it exists
-    let existingPlayer = document.getElementById('player');
-    if (existingPlayer) {
-        existingPlayer.parentNode.removeChild(existingPlayer);
-    }
-    // Create player section
-    let playerSection = document.createElement('div');
-    playerSection.classList.add('player');
-    playerSection.id = 'player';
-    playerSection.innerHTML = `
+
+    function createPlayer(audioFile) {
+        let existingPlayer = document.getElementById('player');
+        if (existingPlayer) {
+            existingPlayer.parentNode.removeChild(existingPlayer);
+        }
+        let playerSection = document.createElement('div');
+        playerSection.classList.add('player');
+        playerSection.id = 'player';
+        playerSection.innerHTML = `
             <div class="player-content">
                 <div class="player-control">
                     <div class="controls" id="replay"><i class="fa-solid fa-rotate-left"></i></div>
@@ -262,101 +340,101 @@ function createPlayer(audioFile) {
             </div>
         `;
 
-    console.log('player is creating')
+        console.log('player is creating')
 
-    // Append player section to web-content
-    let webContent = document.getElementById('web-content');
-    // webContent.innerHTML = ''; // Clear existing content
-    webContent.appendChild(playerSection);
-    // displaying player
-    playerSection.style.display = 'block';
+        // Append player section to web-content
+        let webContent = document.getElementById('web-content');
+        // webContent.innerHTML = ''; // Clear existing content
+        webContent.appendChild(playerSection);
+        // displaying player
+        playerSection.style.display = 'block';
 
-    // Assign variables to elements in the player section
-    playerTime = document.getElementById('player-time');
-    playControl = document.getElementById('play');
-    replayControl = document.getElementById('replay');
-    volumeControl = document.getElementById('volume');
-    rangeControl = document.getElementById('player-range');
+        // Assign variables to elements in the player section
+        playerTime = document.getElementById('player-time');
+        playControl = document.getElementById('play');
+        replayControl = document.getElementById('replay');
+        volumeControl = document.getElementById('volume');
+        rangeControl = document.getElementById('player-range');
 
-    // Initialize WaveSurfer
-    wavesurfer = WaveSurfer.create({
-        container: '.form-wave',
-        waveColor: '#ffffffce',
-        progressColor: '#383351',
-        height: 90,
-        barWidth: 4,
-        responsive: true,
-        barRadius: 4,
-        backend: 'WebAudio', // Use 'WebAudio' or 'MediaElement' based on compatibility
-        normalize: true, // Normalize audio levels across all browsers
-        url: audioFile
-    });
+        // Initialize WaveSurfer
+        wavesurfer = WaveSurfer.create({
+            container: '.form-wave',
+            waveColor: '#ffffffce',
+            progressColor: '#383351',
+            height: 90,
+            barWidth: 4,
+            responsive: true,
+            barRadius: 4,
+            backend: 'WebAudio',
+            normalize: true,
+            url: audioFile
+        });
 
-    // Event listeners for WaveSurfer events
-    wavesurfer.on('ready', function () {
-        let duration = wavesurfer.getDuration();
-        let formattedDuration = new Date(duration * 1000).toISOString().substr(11, 8);
-        playerTime.innerText = formattedDuration;
-        rangeControl.value = 0;
-    });
+        // Event listeners for WaveSurfer events
+        wavesurfer.on('ready', function () {
+            let duration = wavesurfer.getDuration();
+            let formattedDuration = new Date(duration * 1000).toISOString().substr(11, 8);
+            playerTime.innerText = formattedDuration;
+            rangeControl.value = 0;
+        });
 
-    wavesurfer.on('audioprocess', function () {
-        let currentTime = wavesurfer.getCurrentTime();
-        let duration = wavesurfer.getDuration();
-        let remainingTime = duration - currentTime;
-        let formattedTime = new Date(remainingTime * 1000).toISOString().substr(11, 8);
-        playerTime.innerText = formattedTime;
-        rangeControl.value = currentTime / duration;
-    });
+        wavesurfer.on('audioprocess', function () {
+            let currentTime = wavesurfer.getCurrentTime();
+            let duration = wavesurfer.getDuration();
+            let remainingTime = duration - currentTime;
+            let formattedTime = new Date(remainingTime * 1000).toISOString().substr(11, 8);
+            playerTime.innerText = formattedTime;
+            rangeControl.value = currentTime / duration;
+        });
 
-    wavesurfer.on('seek', function () {
-        let currentTime = wavesurfer.getCurrentTime();
-        let duration = wavesurfer.getDuration();
-        let remainingTime = duration - currentTime;
-        let formattedTime = new Date(remainingTime * 1000).toISOString().substr(11, 8);
-        playerTime.innerText = formattedTime;
-    });
+        wavesurfer.on('seek', function () {
+            let currentTime = wavesurfer.getCurrentTime();
+            let duration = wavesurfer.getDuration();
+            let remainingTime = duration - currentTime;
+            let formattedTime = new Date(remainingTime * 1000).toISOString().substr(11, 8);
+            playerTime.innerText = formattedTime;
+        });
 
-    wavesurfer.on('finish', function () {
-        playControl.querySelector('i').classList.remove('fa-pause');
-        playControl.querySelector('i').classList.add('fa-play');
-    });
+        wavesurfer.on('finish', function () {
+            playControl.querySelector('i').classList.remove('fa-pause');
+            playControl.querySelector('i').classList.add('fa-play');
+        });
 
-    // Event listener for play control
-    playControl.addEventListener('click', function () {
-        if (wavesurfer.isPlaying()) {
-            wavesurfer.pause();
-            this.querySelector('i').classList.remove('fa-pause');
-            this.querySelector('i').classList.add('fa-play');
-        } else {
+        // Event listener for play control
+        playControl.addEventListener('click', function () {
+            if (wavesurfer.isPlaying()) {
+                wavesurfer.pause();
+                this.querySelector('i').classList.remove('fa-pause');
+                this.querySelector('i').classList.add('fa-play');
+            } else {
+                wavesurfer.play();
+                this.querySelector('i').classList.remove('fa-play');
+                this.querySelector('i').classList.add('fa-pause');
+            }
+        });
+
+        // Event listener for replay control
+        replayControl.addEventListener('click', function () {
+            wavesurfer.stop();
             wavesurfer.play();
-            this.querySelector('i').classList.remove('fa-play');
-            this.querySelector('i').classList.add('fa-pause');
-        }
-    });
+            playControl.querySelector('i').classList.remove('fa-play');
+            playControl.querySelector('i').classList.add('fa-pause');
+        });
 
-    // Event listener for replay control
-    replayControl.addEventListener('click', function () {
-        wavesurfer.stop();
-        wavesurfer.play();
-        playControl.querySelector('i').classList.remove('fa-play');
-        playControl.querySelector('i').classList.add('fa-pause');
-    });
+        // Event listener for volume control
+        volumeControl.addEventListener('click', function () {
+            let currentVolume = wavesurfer.getVolume();
+            wavesurfer.setVolume(currentVolume === 0 ? 1 : 0);
+            this.querySelector('i').classList.toggle('fa-volume-up');
+            this.querySelector('i').classList.toggle('fa-volume-mute');
+        });
 
-    // Event listener for volume control
-    volumeControl.addEventListener('click', function () {
-        let currentVolume = wavesurfer.getVolume();
-        wavesurfer.setVolume(currentVolume === 0 ? 1 : 0);
-        this.querySelector('i').classList.toggle('fa-volume-up');
-        this.querySelector('i').classList.toggle('fa-volume-mute');
-    });
-
-    // Event listener for range control
-    rangeControl.addEventListener('input', function () {
-        let seekTo = this.value * wavesurfer.getDuration();
-        wavesurfer.seekTo(seekTo / wavesurfer.getDuration());
-    });
-}
+        // Event listener for range control
+        rangeControl.addEventListener('input', function () {
+            let seekTo = this.value * wavesurfer.getDuration();
+            wavesurfer.seekTo(seekTo / wavesurfer.getDuration());
+        });
+    }
 
 
 
@@ -384,29 +462,43 @@ function createPlayer(audioFile) {
 });
 
 
-// Function to check and set star color based on localStorage data
 function checkAndSetColorForCards() {
-    // Check if localStorage is available
     if (typeof localStorage !== 'undefined') {
-        // Get the favorites array from localStorage or initialize an empty array
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-        // Select all buttons with class .add-to-favorites
+        // Set star color for buttons
         let buttons = document.querySelectorAll('.add-to-favorites');
-
-        // Iterate over each button
         buttons.forEach(button => {
-            // Get the data-files attribute value of the current button
             let dataValue = button.getAttribute('data-files');
-
-            // Check if dataValue exists in favorites
             const isFavorite = favorites.some(favorite => favorite.files === dataValue);
 
-            // Set star color based on whether it's in favorites
+            let svg = button.querySelector('svg');
+            let path = svg.querySelector('path');
+
             if (isFavorite) {
-                button.querySelector('i').style.color = '#EA8E37'; // Set star color
+                path.setAttribute('stroke', '#3391e6'); // Set star color for buttons
+                path.setAttribute('fill', '#3391e6');   // Set fill color if needed
             } else {
-                button.querySelector('i').style.color = ''; // Reset star color
+                path.setAttribute('stroke', '#000000'); // Reset star color for buttons
+                path.setAttribute('fill', '#000000');      // Reset fill color if needed
+            }
+        });
+
+        // Set star color for nav icons
+        let navFavoritesIcons = document.querySelectorAll('.nav-favorites');
+        navFavoritesIcons.forEach(navIcon => {
+            let dataValue = navIcon.getAttribute('data-files');
+            const isFavorite = favorites.some(favorite => favorite.files === dataValue);
+
+            let svg = navIcon.querySelector('svg');
+            let path = svg.querySelector('path');
+
+            if (isFavorite) {
+                path.setAttribute('stroke', '#3391e6'); // Set star color for nav icons
+                path.setAttribute('fill', '#3391e6');   // Set fill color if needed
+            } else {
+                path.setAttribute('stroke', '#000000'); // Reset star color for nav icons
+                path.setAttribute('fill', '#000000');      // Reset fill color if needed
             }
         });
     }
@@ -416,8 +508,6 @@ function checkAndSetColorForCards() {
 let directoryHtml = document.getElementById("directory").innerHTML;
 let showFav = false;
 const directoryElement = document.getElementById("directory");
-
-
 const showAllFavorite = () => {
     if (showFav) {
         directoryElement.style.display = "block";
@@ -428,23 +518,23 @@ const showAllFavorite = () => {
     }
     showFav = !showFav;
 
-    // Toggle icon color (assuming this functionality is still needed)
     const icon = document.querySelector("#showAllFavorite i");
     const currentColor = icon.style.color;
 
-    if (currentColor === "orange") {
-        icon.style.color = "black";
-    } else {
-        icon.style.color = "orange";
-    }
+    // if (currentColor === "black") {
+    //     icon.style.color = "#3391e6";
+    // } else {
+    //     icon.style.color = "black";
+    // }
 }
+
+
+
 function initializeDirectory() {
     const container = document.getElementById('main-content');
 
-    // Observer configuration
     const observerConfig = { childList: true, subtree: true };
 
-    // Callback function to handle changes
     const observerCallback = function (mutationsList, observer) {
         for (let mutation of mutationsList) {
             if (mutation.type === 'childList') {
@@ -454,43 +544,163 @@ function initializeDirectory() {
         }
     };
 
-    // Create a new observer
     const observer = new MutationObserver(observerCallback);
 
-    // Start observing #main-content
     observer.observe(container, observerConfig);
 
-    // Initial call to set colors
     checkAndSetColorForCards();
 }
+
+
+
+
 function toggleFavorite(event) {
     const button = event.currentTarget;
     const audioFileName = button.getAttribute('data-files');
+    const folderName = button.getAttribute('data-folder');
+    const childFolderName = button.getAttribute('data-child-folder');
+
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const index = favorites.findIndex(favorite => favorite.files === audioFileName);
+    console.log(favorites);
     if (index !== -1) {
         favorites.splice(index, 1);
-        button.querySelector('i').style.color = "black";
+        button.querySelector('svg').style.color = "black";
     } else {
-        favorites.push({ files: audioFileName });
-        button.querySelector('i').style.color = "orange";
+        favorites.push({ files: audioFileName, folder: folderName, childFolder: childFolderName });
+        button.querySelector('svg').style.color = "#3391e6";
     }
+
     localStorage.setItem('favorites', JSON.stringify(favorites));
-    initializeFavorites()
+    initializeFavorites();
+    initializeDirectory();
 }
+
 function initializeFavorites() {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
     document.getElementById("favorites_list").innerHTML = favorites.map((fav) => {
-        const fileNameParts = fav.files.split('.');
+        // Check if fav.files is not null before splitting
+        const fileNameParts = (fav.files || '').split('.');
         const displayFileName = fileNameParts[0];
         return `
-            <li class="flex p-2 items-center">
-                <div class="image_cover mr-2" style="padding: 0 3px; border: 1px solid #01E0B9; height: 24px;">
-                    <img src="images/audio-wave.png" alt="" class="img" style="height: 100%;">
-                </div>
-                <p class="text-white">${displayFileName}</p>
+        <li class="favorites-item" onclick="toggleHeightone(event)">
+        <a class="favorites-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="size-6" style="height: 20px; margin-right: 8px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="size-6" style="height: 20px; margin-right: 8px">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z">
+                </path>
+            </svg>
+            ${fav.folder}
+        </a>
+        <ul class="favorites-list-list">
+            <li class="favorites-list-item" onclick="toggleHeightTwo(this)">
+                <a class="favorites-list-item-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-6" style="height: 20px; margin-right: 8px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-6" style="height: 20px; margin-right: 8px">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z">
+                        </path>
+                    </svg>
+                    ${fav.folder}
+                </a>
+                <ul class="favorites-link-list">
+                    <li class="favorites-link-item">
+                        <a class="favorites-item-links">
+                            <button type="button" class="bg-transparent border-none star-icon remove-favorites"
+                                style="color: #3391e6;" data-files="${displayFileName}">
+                                <i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="#3391e6" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6"
+                                        style="width: 25px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                            stroke="#3391e6" />
+                                    </svg>
+                                </i>
+                            </button>
+                            <span>
+                                <div class="image_cover mr-1"
+                                    style="padding: 0 3px; border: 1px solid #01E0B9; height: 14px; display: flex; items: center;">
+                                    <img src="images/audio-wave.png" alt="" class="img"
+                                        style="transform: scale(1); height: 100%;">
+                                </div>
+                                <span>${displayFileName}</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-        `;
+        </ul>
+    </li>
+    `;
     }).join("");
+
+    // Use event delegation to handle the click event
+    document.getElementById('favorites_list').addEventListener('click', function (event) {
+        if (event.target.closest('.remove-favorites')) {
+            var dataFile = event.target.closest('.remove-favorites').getAttribute('data-files');
+            console.log('Removing:', dataFile); // Debugging statement
+            removeFavorites(dataFile);
+        }
+    });
 }
 
+
+// remove favorites its from localstorage favorites
+function removeFavorites(audioFileName) {
+    audioFileName = audioFileName + '.wav';
+    // console.log('Removing file:', audioFileName);
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const index = favorites.findIndex(favorite => favorite.files === audioFileName);
+
+    if (index !== -1) {
+        favorites.splice(index, 1);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        initializeFavorites();
+        checkAndSetColorForCards();
+    }
+}
+
+// // dom content loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeFavorites();
+});
+
+
+
+
+
+
+
+
+function toggleHeightone(event) {
+    var favorites_list_item = event.target.closest('.favorites-item');
+    var favorites_list_list = favorites_list_item.querySelector('.favorites-list-list');
+
+    if (favorites_list_list.style.height === '0px' || favorites_list_list.style.height === '') {
+        favorites_list_list.style.height = 'auto';
+    } else {
+        favorites_list_list.style.height = '0px';
+    }
+}
+
+function toggleHeightTwo(item) {
+    // Find the .favorites-link-list within the clicked .favorites-list-item
+    var favoritesLinkList = item.querySelector('.favorites-link-list');
+
+    // Toggle the height based on current state
+    if (favoritesLinkList.style.height === '0px' || favoritesLinkList.style.height === '') {
+        favoritesLinkList.style.height = 'auto';
+    } else {
+        favoritesLinkList.style.height = '0px';
+    }
+}

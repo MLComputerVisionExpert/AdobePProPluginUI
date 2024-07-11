@@ -9,12 +9,21 @@
     outline: none;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
+    user-select: none;
 }
 
 body {
     overflow-y: hidden;
 }
 
+/* #directory .directory-item{
+    position: relative;
+}
+.directory-item ul svg{
+    position: absolute;
+    left: 0;
+    top: 50%;
+} */
 ul {
     list-style: none;
 }
@@ -22,6 +31,7 @@ ul {
 .directory-item.active>ul {
     display: block !important;
 }
+
 
 /* width */
 ::-webkit-scrollbar {
@@ -31,7 +41,7 @@ ul {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #141414 !important;
+    background: transparent !important;
 }
 
 /* Handle */
@@ -181,9 +191,6 @@ input:focus {
     padding: 1.8rem;
 }
 
-#directory {
-    padding: 10px;
-}
 
 .directory-item {
     padding: 10px;
@@ -279,6 +286,9 @@ input:focus {
     font-size: 13px;
 }
 
+#favorites_list li button .fa-star {
+    color: #3391e6;
+}
 
 
 
@@ -292,6 +302,7 @@ input:focus {
 
 .sidebar {
     width: 100%;
+    min-width: 34y0px;
 }
 
 .content {
@@ -320,7 +331,7 @@ input:focus {
 }
 
 .star {
-    font-size: 25px;
+    font-size: 20px;
     color: #000000;
     text-align: center;
 }
@@ -337,7 +348,6 @@ input:focus {
     position: relative;
     align-items: center;
     display: flex;
-    margin-bottom: 10px;
 }
 
 .search-box .search-icon {
@@ -543,11 +553,11 @@ input:focus {
 .web-content .card {
     background-color: #141414;
     border-radius: 5px;
-    /* Adjusts the width of each card to be one-third of the row, minus margin */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     padding: 10px;
+    position: relative;
 }
 
 #directory .directory-item ul {
@@ -558,12 +568,86 @@ input:focus {
     padding-bottom: 0 !important;
 }
 
-.sidebar ul li:first-child {
-    padding-top: 17px !important;
-}
-
 .sidebar ul li:hover {
     cursor: pointer;
+}
+
+
+/* favorites list */
+.favorites-list {
+    display: block;
+    margin: 0;
+    padding: 0 !important;
+}
+
+.favorites-list .favorites-item {
+    position: relative;
+    display: block;
+    padding-top: 0 !important;
+    overflow: hidden;
+}
+
+.favorites-list .favorites-item:hover {
+    color: #fff;
+}
+
+.favorites-list .favorites-item .favorites-link {
+    display: flex;
+    align-items: center;
+    color: #c0c0c0;
+    padding: 15px 20px;
+    font-size: 15px;
+    border-bottom: 1px solid var(--light-gray);
+    cursor: pointer;
+}
+
+.favorites-list .favorites-item .favorites-list-list {
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 0;
+
+
+}
+
+.favorites-list .favorites-item .favorites-list-list .favorites-list-item {
+    position: relative;
+    display: block;
+    border-bottom: 1px solid var(--light-gray);
+    overflow: hidden;
+}
+
+.favorites-list .favorites-item .favorites-list-list .favorites-list-item .favorites-list-item-link {
+    display: flex;
+    align-items: center;
+    color: #c0c0c0;
+    padding: 15px 20px;
+    padding-left: 50px;
+    font-size: 15px;
+    cursor: pointer;
+
+}
+
+.favorites-list .favorites-item .favorites-list-list .favorites-list-item .favorites-link-list {
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 0;
+}
+
+.favorites-list .favorites-item .favorites-list-list .favorites-list-item .favorites-link-list .favorites-link-item .favorites-item-links {
+    display: flex;
+    align-items: center;
+    color: #c0c0c0;
+    padding: 15px 20px;
+    font-size: 13px;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.favorites-list .favorites-item .favorites-list-list .favorites-list-item .favorites-link-list .favorites-link-item .favorites-item-links>span {
+    display: flex;
+    align-items: center;
 }
 
 .web-content .row .empty-screen {
@@ -576,6 +660,11 @@ input:focus {
 
 .web-content .voice-card {
     position: relative;
+    transition: ease .3s;
+}
+
+.web-content .voice-card:hover {
+    background-color: var(--light-gray);
 }
 
 .web-content .voice-card .voice-card-content .voice-card-content-det {
@@ -589,7 +678,7 @@ input:focus {
 .web-content .voice-card .voice-card-content .voice-card-content-det .voice-det {
     display: flex;
     gap: 10px;
-    color: #f1f1f1;
+    color: #c0c0c0;
     background: none;
     align-items: center;
 }
@@ -600,16 +689,28 @@ input:focus {
 
 .web-content .voice-card .voice-card-content .voice-card-content-det .voice-det span {
     background: none;
+    font-size: 14px;
+    color: #c0c0c0;
+    font-weight: 500;
 }
 
 .web-content .voice-card .voice-card-content .voice-card-content-det .star-icon {
     background: none;
 }
 
-.web-content .voice-card .voice-card-content .voice-card-content-det .star-icon i {
-    font-size: 20px;
-    background: none;
-    color: #000000;
+.web-content .voice-card .voice-card-content .voice-card-content-det .star-icon svg:hover path {
+    fill: #3d84c2;
+    stroke: #3d84c2;
+}
+
+.nav-favorites svg:hover path {
+    fill: #3d84c2;
+    stroke: #3d84c2;
+}
+
+.remove-favorites i svg:hover path {
+    fill: #3d84c2;
+    stroke: #3d84c2;
 }
 
 .wave-form {
@@ -734,10 +835,15 @@ input:focus {
 }
 
 
-#directory li {
-    padding: 14px;
+#directory li li {
+    padding: 14px 10px;
+    padding-left: 20px;
+    padding-right: 0 !important;
 }
 
+#directory li {
+    font-size: 13px !important;
+}
 
 
 .navbar-nav-list span,
@@ -795,6 +901,7 @@ input:focus {
 
     .content {
         padding: 5px 10px;
+        padding-left: 0 !important;
     }
 
     .md\:w-1\/2 {
@@ -806,4 +913,78 @@ input:focus {
     .lg\:w-1\/3 {
         width: 33.333% !important;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* draggable */
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#content {
+    flex: 1;
+    /* Allow content area to grow to fill remaining space */
+    display: flex;
+}
+
+.sidebar {
+    width: 300px;
+    /* Initial width */
+    min-width: 200px;
+    /* Minimum width */
+    overflow-y: auto;
+    transition: width 0.3s ease;
+    /* Smooth transition for width changes */
+}
+
+.handle {
+    width: 10px;
+    cursor: ew-resize;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.handle span {
+    content: "";
+    height: 3px;
+    width: 3px;
+    background-color: #B0B0B0;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.content {
+    flex: 1;
+    /* Allow content to grow */
+    overflow-y: auto;
+}
+
+.directory-item ul {
+    max-width: 300px;
 }
